@@ -24,9 +24,9 @@ public class CountDownViewHelper {
             return null;
         }
         int minutes = time / 60;
-        int seconds = time - minutes;
-        String.format("%s:%s",minutes,seconds);
-        textView.setText(String.valueOf(time));
+        int seconds = time - (minutes*60);
+        String result = String.format("%02d:%02d",minutes,seconds);
+        textView.setText(result);
         return textView;
     }
 
