@@ -11,6 +11,7 @@ import android.util.Log;
 
 import shaketimer.mcfly.com.shaketimer.R;
 import shaketimer.mcfly.com.shaketimer.widget.CountDownListener;
+import shaketimer.mcfly.com.shaketimer.widget.NotificationPlayer;
 import shaketimer.mcfly.com.shaketimer.widget.SCountDownTimer;
 
 public class TimerService extends Service implements ITimerService, CountDownListener {
@@ -49,7 +50,7 @@ public class TimerService extends Service implements ITimerService, CountDownLis
             return;
         }
         isRunning = true;
-        countDownTimer = new SCountDownTimer(timeInFuture*1000,this);
+        countDownTimer = new SCountDownTimer(currentTime*1000,this);
         this.countDownTimer.start();
     }
 
@@ -137,6 +138,7 @@ public class TimerService extends Service implements ITimerService, CountDownLis
                 //.setFullScreenIntent()
                 .build();
         mNotifyManager.notify(133, notification);
+        NotificationPlayer.playDefaultRingtone(getApplicationContext());
     }
 
 

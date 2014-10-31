@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.DigitalClock;
+import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -35,9 +36,6 @@ public class TimerActivity extends Activity implements IServiceConnected, Sensor
     private TimerServiceManager timerServiceManager;
     private CountDownViewHelper countDownViewHelper;
     private TextView chronometer;
-
-    private int configurated_minutes = 1;
-    private int configurated_seconds = 0;
 
     private int configuratedTimer = 10;
 
@@ -80,14 +78,17 @@ public class TimerActivity extends Activity implements IServiceConnected, Sensor
 
     public void startButtonAction(View v) {
         this.timerServiceManager.getService().start();
+        startProgressBar();
     }
 
     public void stopButtonAction(View v) {
         this.timerServiceManager.getService().pause();
+        stopProgressBar();
     }
 
     public void resetButtonAction(View v) {
         this.timerServiceManager.getService().restart();
+        startProgressBar();
     }
 
     public void setTimer(int timer) {
@@ -109,6 +110,18 @@ public class TimerActivity extends Activity implements IServiceConnected, Sensor
         sensorMgr.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    private void startProgressBar() {
+        ProgressBar progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopProgressBar() {
+        ProgressBar progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
     //--------------------------------------------------------
     //-- IServiceConnected
     //--------------------------------------------------------
@@ -116,7 +129,7 @@ public class TimerActivity extends Activity implements IServiceConnected, Sensor
     public void onServiceConnected() {
         Log.d(TAG,"[onServiceConnected]");
         this.timerServiceManager.getService().setTimer(this.configuratedTimer);
-        this.countDownViewHelper.showTime(this.configuratedTimer);
+        this.countDownViewHelper.showTime(configuratedTimer);
     }
 
     @Override
@@ -126,8 +139,9 @@ public class TimerActivity extends Activity implements IServiceConnected, Sensor
 
     @Override
     public void signalEnd() {
-        setTimer(this.configuratedTimer);
+        setTimer(configuratedTimer);
         this.countDownViewHelper.showTime(this.configuratedTimer);
+        stopProgressBar();
     }
 
 

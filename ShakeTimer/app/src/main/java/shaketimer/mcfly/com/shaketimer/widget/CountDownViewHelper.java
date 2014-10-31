@@ -1,8 +1,12 @@
 package shaketimer.mcfly.com.shaketimer.widget;
 
 import android.content.Context;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 /**
  * Created by mcfly on 22/10/2014.
@@ -19,10 +23,12 @@ public class CountDownViewHelper {
         if(textView==null) {
             return null;
         }
+        int minutes = time / 60;
+        int seconds = time - minutes;
+        String.format("%s:%s",minutes,seconds);
         textView.setText(String.valueOf(time));
         return textView;
     }
-
 
 
 }

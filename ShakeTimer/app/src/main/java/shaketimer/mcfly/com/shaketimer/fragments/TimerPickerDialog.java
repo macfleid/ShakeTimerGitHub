@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
 
 import shaketimer.mcfly.com.shaketimer.R;
@@ -17,6 +18,9 @@ import shaketimer.mcfly.com.shaketimer.TimerActivity;
 public class TimerPickerDialog extends DialogFragment {
 
     private View view;
+
+    private int minutes;
+    private int seconds;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class TimerPickerDialog extends DialogFragment {
         view = inflater.inflate(R.layout.timer_picker_dialog,container, false);
         NumberPicker minutesPicker = (NumberPicker) view.findViewById(R.id.minutes_picker);
         NumberPicker secondsPicker = (NumberPicker) view.findViewById(R.id.seconds_picker);
+        Button cancel_button = (Button) view.findViewById(R.id.cancel_button);
+        Button validate_button = (Button) view.findViewById(R.id.validate_button);
 
         minutesPicker.setMaxValue(60);
         secondsPicker.setMaxValue(60);
@@ -42,6 +48,9 @@ public class TimerPickerDialog extends DialogFragment {
 
         setListener(minutesPicker);
         setListener(secondsPicker);
+
+        setCancelAction(cancel_button);
+        setValidateAction(validate_button);
         return view;
     }
 
@@ -51,10 +60,28 @@ public class TimerPickerDialog extends DialogFragment {
         picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i2) {
+                minutes = minutesPicker.getValue();
+                seconds = secondsPicker.getValue();
+            }
+        });
+    }
+
+    private void setCancelAction(Button b) {
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+    }
+
+    private void setValidateAction(Button b) {
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 TimerActivity activity = (TimerActivity) getActivity();
-                int minutes = minutesPicker.getValue();
-                int seconds = secondsPicker.getValue();
                 activity.setTimer(minutes*60+seconds);
+                dismiss();
             }
         });
     }
